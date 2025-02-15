@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Loader2, Wallet, Check, ExternalLink } from "lucide-react";
@@ -50,7 +50,7 @@ interface TaskBoardProps {
   tasks: Task[];
 }
 
-export default function TaskBoard() {
+const TaskBoard: FC = ()=>{
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [newTask, setNewTask] = useState({ title: "", description: "", status: "todo" });
@@ -197,10 +197,12 @@ export default function TaskBoard() {
         verified: false,
         createdAt: new Date()
       });
-
+      
       const task: Task = {
         id: docRef.id,
-        ...newTask,
+        title: newTask.title,
+        description: newTask.description,
+        status: newTask.status as "todo" | "in-progress" | "done",
         userId: "user-1",
         verified: false,
         createdAt: new Date()
@@ -286,7 +288,7 @@ export default function TaskBoard() {
               <p className="text-muted-foreground">Manage your tasks efficiently</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap">
             <Button
               variant={walletConnected ? "outline" : "default"}
               onClick={connectWallet}
@@ -439,3 +441,5 @@ export default function TaskBoard() {
     </div>
   );
 }
+
+export default TaskBoard;
